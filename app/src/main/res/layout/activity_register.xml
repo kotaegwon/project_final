@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_bg"
+    tools:context=".activity.RegisterActivity">
+
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:ems="12"
+            android:hint="이름" />
+
+        <EditText
+            android:id="@+id/et_id_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:layout_marginTop="15dp"
+            android:hint="아이디" />
+
+        <EditText
+            android:id="@+id/et_password_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:inputType="numberPassword"
+            android:ems="12"
+            android:hint="비밀번호" />
+
+        <CheckBox
+            android:id="@+id/show_passowrd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="70dp"
+            android:layout_marginTop="10dp"
+            android:text="비밀번호 표시"/>
+
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:ems="12"
+            android:inputType="phone"
+            android:hint="번호" />
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/btn_style"
+            android:text="회원가입" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/btn_style"
+            android:text="취소" />
+
+</LinearLayout>
