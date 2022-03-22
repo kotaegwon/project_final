@@ -19,13 +19,12 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    @GET("retrofit/get")
+    @GET("/retrofit/get")
     Call<ResponseBody> getFunc(@Query("data")String data);
 
     @FormUrlEncoded
-    @POST("retrofit/post")
+    @POST("/retrofit/post")
     Call<ResponseBody> postFunc(@Field("data") String data);
-
 
     @FormUrlEncoded
     @PUT("routes/retrofit/put/{id}")
@@ -41,8 +40,19 @@ public interface ApiService {
     //회원가입
     @POST("/register")
     Call<JoinResponse> userJoin(@Body JoinData data);
+/*
+    @GET("/go")
+    Call<ResponseBody> directGo();
 
-    @POST("retrofit/post")
-    Call<ResponseBody> directFunc(@Field("data") String data);
+    @GET("/left")
+    Call<ResponseBody> directLeft();
 
+    @GET("/right")
+    Call<ResponseBody> directRight();
+
+    @GET("/back")
+    Call<ResponseBody> directBack();
+*/
+    @GET("/{direction}")
+    Call<ResponseBody> direction(@Path("direction") String direction);
 }

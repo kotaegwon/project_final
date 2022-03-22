@@ -21,6 +21,7 @@ import org.techtown.rc119.Login_Register.LoginData;
 import org.techtown.rc119.Login_Register.LoginResponse;
 import org.techtown.rc119.Network.ApiService;
 import org.techtown.rc119.Network.RetrofitClient;
+import org.techtown.rc119.Network.RetrofitClient2;
 import org.techtown.rc119.R;
 
 import retrofit2.Call;
@@ -46,8 +47,9 @@ public class LogInActivity extends AppCompatActivity {
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_join=(Button)findViewById(R.id.btn_register);
 
-        service = RetrofitClient.getClient().create(ApiService.class);
+        service = RetrofitClient2.getClient().create(ApiService.class);
 
+        //비밀번호 보이기 체크박스
         show_passowrd_Login=(CheckBox)findViewById(R.id.show_passowrd_Login);
         show_passowrd_Login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -60,6 +62,7 @@ public class LogInActivity extends AppCompatActivity {
             }
         });
 
+        //로그인 버튼 클릭 시 attempLogin 메서드 실행
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +71,7 @@ public class LogInActivity extends AppCompatActivity {
             }
         });
 
+        //회원 가입 버튼 클릭시 이동
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +81,7 @@ public class LogInActivity extends AppCompatActivity {
         });
     }
 
+    //회원가입에 성공한 아이디 비밀번호 로그인 액티비티 에디트 텍스트에 출력
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -150,26 +155,6 @@ public class LogInActivity extends AppCompatActivity {
         }
     }
 
-//    private void startLogin(LoginData data) {
-//        service.userLogin(data).enqueue(new Callback<LoginResponse>() {
-//            @Override
-//            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-//                LoginResponse result = response.body();
-//                Toast.makeText(LogInActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
-//                if(response.isSuccessful()){
-//                    startActivity(new Intent(LogInActivity.this, ControlActivity.class));
-//                }
-//                //showProgress(false);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<LoginResponse> call, Throwable t) {
-//                Toast.makeText(LogInActivity.this, "로그인 에러 발생", Toast.LENGTH_SHORT).show();
-//                Log.e("로그인 에러 발생", t.getMessage());
-//                //showProgress(false);
-//            }
-//        });
-//    }
 
     //이메일 로그인 조건
 //    private boolean isEmailValid(String email) {

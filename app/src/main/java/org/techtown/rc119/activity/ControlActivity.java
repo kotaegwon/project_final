@@ -4,15 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Spanned;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -24,10 +28,14 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.techtown.rc119.ImageList.ImageListActivity;
 import org.techtown.rc119.Network.ApiService;
 import org.techtown.rc119.Network.RetrofitClient;
@@ -60,6 +68,10 @@ public class ControlActivity extends AppCompatActivity {
     private Button btn_go, btn_right, btn_left, btn_back, btn_capture;
     private long lastTimeBackPressed;
 
+    private String temp; //온도 저장 변수
+    private String temp_url="http://192.168.0.254:8500/login";
+    private TextView tv_temperature; //온도 출력 텍스트
+
     //private final String NodeUrl = "http://192.168.0.254:8500";//"http://104.198.3.107:3000";//"http://192.168.0.254:8500";
 
     private Retrofit retrofit;
@@ -72,15 +84,17 @@ public class ControlActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control);
 
-
         //(Rtrofit 클래스)
         service = RetrofitClient.getClient().create(ApiService.class);
+
+        //온도 텍스트뷰
+        tv_temperature=(TextView)findViewById(R.id.tv_temperature);
 
         //액션바를 툴바로 대체하기기
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        //프레임 레이아웃 웹뷰 프레그먼트 온도 값 보여줌
         frame_top = (FrameLayout) findViewById(R.id.frame_top);
 
         //캡쳐 버튼
@@ -99,7 +113,7 @@ public class ControlActivity extends AppCompatActivity {
         webview.setWebChromeClient(new WebChromeClient());
         webview.getSettings().setUseWideViewPort(true);
         webview.getSettings().setLoadWithOverviewMode(true);
-        webview.loadUrl(" http://192.168.0.203:8091/?action=stream");
+        webview.loadUrl(" http://192.168.0.207:8091/?action=stream");
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.sidenav);
@@ -108,8 +122,6 @@ public class ControlActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(drawerToggle);
         //네비게이션뷰의 메뉴아이콘의 색조제거
         navigationView.setItemIconTintList(null);
-
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -131,7 +143,6 @@ public class ControlActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
         //메인 UI 이벤트
         View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -174,11 +185,13 @@ public class ControlActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     TouchDirection("go");
+                                    Log.i("ko", "go");
                                 }
                             }).start();
                         } else if (event.getAction() == MotionEvent.ACTION_UP) {
                             isBtnDown = false;
                             TouchDirection("stop");
+                            Thread.currentThread().interrupted();
                             Log.i("ko", "stop");
                             Toast.makeText(ControlActivity.this, "정지", Toast.LENGTH_SHORT).show();
                         }
@@ -190,7 +203,10 @@ public class ControlActivity extends AppCompatActivity {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
+
                                     TouchDirection("right");
+                                    Log.i("ko", "right");
+
                                 }
                             }).start();
                         } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -207,7 +223,9 @@ public class ControlActivity extends AppCompatActivity {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
+
                                     TouchDirection("left");
+                                    Log.i("ko","left");
                                 }
                             }).start();
                         } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -224,6 +242,7 @@ public class ControlActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     TouchDirection("back");
+                                    Log.i("ko","back");
                                 }
                             }).start();
                         } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -242,8 +261,6 @@ public class ControlActivity extends AppCompatActivity {
         btn_left.setOnTouchListener(touchListener);
         btn_back.setOnTouchListener(touchListener);
     }
-
-
     //툴바에 toolbar 인플레이트
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -283,14 +300,16 @@ public class ControlActivity extends AppCompatActivity {
         return dateFormat.format(date);
     }
 
-    //방향키 터치 post방식 전송 메소드
+
     private void TouchDirection(String data) {
 
-        Call<ResponseBody> call_post = service.directFunc(data);
+        Call<ResponseBody> call_post = service.direction(data);
+        //enqueue로 비동기 통신 실행
         call_post.enqueue(new Callback<ResponseBody>() {
             @Override
+            //Callback 리스너 등록
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful()) { //onResponse통신 성공시 Callback
                     try {
                         String result = response.body().string();
                         Log.i("ko", "result = " + result);
@@ -299,11 +318,13 @@ public class ControlActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else {
+                    //에러 코드 확인
                     Log.i("ko", "error = " + String.valueOf(response.code()));
                     Toast.makeText(getApplicationContext(), "error = " + String.valueOf(response.code()), Toast.LENGTH_SHORT).show();
                 }
             }
 
+            //통신 실패시 callback
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.i("ko", "Fail");

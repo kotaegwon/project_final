@@ -11,12 +11,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class RetrofitClient {
+public class RetrofitClient2 {
 
-    private final static String BASE_URL = "http://192.168.0.254:8500/";//http://104.198.3.107:8888";//"http://192.168.0.254:8600";
+    private final static String BASE_URL = "http://104.198.3.107:3000";//http://104.198.3.107:8888";//"http://192.168.0.254:8600";
     private static Retrofit retrofit = null;
 
-    private RetrofitClient() {
+    private RetrofitClient2() {
     }
     public static Retrofit getClient() {
         Gson gson=new GsonBuilder()

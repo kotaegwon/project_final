@@ -20,6 +20,7 @@ import org.techtown.rc119.Login_Register.JoinData;
 import org.techtown.rc119.Login_Register.JoinResponse;
 import org.techtown.rc119.Network.ApiService;
 import org.techtown.rc119.Network.RetrofitClient;
+import org.techtown.rc119.Network.RetrofitClient2;
 import org.techtown.rc119.R;
 
 import retrofit2.Call;
@@ -49,7 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         et_phone=(EditText)findViewById(R.id.et_phone);
         et_phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        service = RetrofitClient.getClient().create(ApiService.class);
+        service = RetrofitClient2.getClient().create(ApiService.class);
 
         //비밀번호 표시 체크박스
         showPassword=(CheckBox) findViewById(R.id.show_passowrd);
