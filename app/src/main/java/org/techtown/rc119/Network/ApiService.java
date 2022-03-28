@@ -40,19 +40,7 @@ public interface ApiService {
     //회원가입
     @POST("/register")
     Call<JoinResponse> userJoin(@Body JoinData data);
-/*
-    @GET("/go")
-    Call<ResponseBody> directGo();
 
-    @GET("/left")
-    Call<ResponseBody> directLeft();
-
-    @GET("/right")
-    Call<ResponseBody> directRight();
-
-    @GET("/back")
-    Call<ResponseBody> directBack();
-*/
     @GET("/{direction}")
     Call<ResponseBody> direction(@Path("direction") String direction);
 }

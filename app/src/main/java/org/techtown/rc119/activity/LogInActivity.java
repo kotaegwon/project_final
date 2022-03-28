@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -16,6 +17,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
+
+
+import com.dd.CircularProgressButton;
 
 import org.techtown.rc119.Login_Register.LoginData;
 import org.techtown.rc119.Login_Register.LoginResponse;
@@ -34,7 +38,7 @@ public class LogInActivity extends AppCompatActivity {
     private Button btn_login, btn_join;
     private ApiService service;
     private CheckBox show_passowrd_Login;
-
+    private CircularProgressButton circularProgressButton;
     final static int REQUEST_CODE_START_INPUT=1;
 
     @Override
@@ -66,7 +70,6 @@ public class LogInActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(LogInActivity.this,ControlActivity.class));
                 attemptLogin();
             }
         });
