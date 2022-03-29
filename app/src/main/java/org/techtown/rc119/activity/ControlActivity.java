@@ -137,7 +137,13 @@ public class ControlActivity extends AppCompatActivity {
                         break;
                     case R.id.menu_logout:
                         Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(ControlActivity.this, LogInActivity.class));
+                        Intent logout=new Intent(ControlActivity.this, LogInActivity.class);
+                        logout.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(logout);
+                        break;
+                    case R.id.menu_map:
+                        Toast.makeText(getApplicationContext(), "현재 위치",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(ControlActivity.this, GoogleMapActivity.class));
                         break;
                 }
                 return false;
@@ -269,19 +275,19 @@ public class ControlActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_map:
-                GoogleMapFragment gmap = new GoogleMapFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_top, gmap, "main")
-                        .commit();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_map:
+//                GoogleMapFragment gmap = new GoogleMapFragment();
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.frame_top, gmap, "main")
+//                        .commit();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

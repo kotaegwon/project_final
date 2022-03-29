@@ -1,5 +1,6 @@
 package org.techtown.rc119.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,11 +12,15 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.widget.Button;
 
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 
@@ -34,17 +39,52 @@ import retrofit2.Response;
 
 
 public class LogInActivity extends AppCompatActivity {
+
     private EditText et_id, et_password;
     private Button btn_login, btn_join;
     private ApiService service;
     private CheckBox show_passowrd_Login;
     private CircularProgressButton circularProgressButton;
     final static int REQUEST_CODE_START_INPUT=1;
+    private long backtime=0;
+    private boolean keyboardListenersAttached=false;
+    private ViewGroup rootLayout;
 
+    private ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener=new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            int heightDiff=rootLayout.getRootView().getHeight()-rootLayout.getHeight();
+            int contentViewTop=getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
+
+            if(heightDiff<=contentViewTop){
+                rootLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((ScrollView)rootLayout).fullScroll(ScrollView.FOCUS_UP);
+                    }
+                });
+            }
+            else{
+                rootLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((ScrollView)rootLayout).fullScroll(ScrollView.FOCUS_DOWN);
+                    }
+                });
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+        if(!keyboardListenersAttached){
+            rootLayout=(ViewGroup) findViewById(R.id.login_scroll);
+            rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
+
+            keyboardListenersAttached=true;
+        }
 
         et_id = (EditText) findViewById(R.id.et_id);
         et_password = (EditText) findViewById(R.id.et_password);
@@ -92,8 +132,6 @@ public class LogInActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 et_id.setText(data.getCharSequenceExtra("id"));
                 et_password.setText(data.getCharSequenceExtra("password"));
-            }else{
-                Toast.makeText(LogInActivity.this, "아이디, 비밀번호를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -158,6 +196,22 @@ public class LogInActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage("앱을 종료하시겠습니까?");
+        builder.setPositiveButton("아니오",((dialog, which) -> {dialog.cancel();}));
+        builder.setNegativeButton("예",((dialog, which) -> {finish();}));
+        builder.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(keyboardListenersAttached){
+            rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(keyboardLayoutListener);
+        }
+    }
 
     //이메일 로그인 조건
 //    private boolean isEmailValid(String email) {

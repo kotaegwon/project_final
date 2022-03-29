@@ -10,6 +10,12 @@
             android:title="이미지 리스트"
             android:icon="@drawable/image_list"/>
 
+
+        <item
+            android:id="@+id/menu_map"
+            android:title="구글 map"
+            android:icon="@drawable/mappoint"/>
+
         <item
             android:id="@+id/menu_logout"
             android:title="로그아웃"

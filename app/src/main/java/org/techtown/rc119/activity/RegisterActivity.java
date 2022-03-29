@@ -9,10 +9,14 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 
@@ -40,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
 
 
         et_name=(EditText)findViewById(R.id.et_name);
@@ -87,6 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void attemptJoin() {
         et_name.setError(null);
@@ -165,6 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "회원가입 에러 발생", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 //    private void startJoin(JoinData data) {

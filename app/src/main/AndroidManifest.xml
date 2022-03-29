@@ -26,21 +26,31 @@
 
         <activity
             android:name=".activity.LogInActivity"
-            android:exported="true" />
-        <activity android:name=".ImageList.ImageListActivity" />
-        <activity
-            android:name=".activity.ControlActivity"
-            android:exported="true" >
-
-
+            android:launchMode="singleTask"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".ImageList.ImageListActivity" />
+
+        <activity
+            android:name=".activity.ControlActivity"
+            android:exported="true" >
 
         </activity>
-        <activity android:name=".activity.RegisterActivity" />
+
+        <activity android:name=".activity.RegisterActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".activity.GoogleMapActivity"
+            android:exported="true">
+
+        </activity>
     </application>
 
 </manifest>
