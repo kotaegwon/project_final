@@ -3,22 +3,22 @@ package org.techtown.rc119.Login_Register;
 import com.google.gson.annotations.SerializedName;
 
 public class JoinData {
-    @SerializedName("name")
-    private String name;
+    @SerializedName("username")
+    private String username;
 
-    @SerializedName("id")
-    private String id;
+    @SerializedName("userid")
+    private String userid;
 
-    @SerializedName("pw")
-    private String pwd;
+    @SerializedName("userpassword")
+    private String userpassword;
 
-    @SerializedName("phonenumber")
-    private String phonenumber;
+    @SerializedName("userphone")
+    private String userphone;
 
-    public JoinData(String name, String id, String pw, String phonenumber) {
-        this.name = name;
-        this.id=id;
-        this.pwd = pw;
-        this.phonenumber=phonenumber;
+    public JoinData(String username, String userid, String userpassword, String userphone) {
+        this.username = username;
+        this.userid=userid;
+        this.userpassword = userpassword;
+        this.userphone=userphone;
     }
 }

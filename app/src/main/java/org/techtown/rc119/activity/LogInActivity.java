@@ -46,52 +46,18 @@ public class LogInActivity extends AppCompatActivity {
     private CheckBox show_passowrd_Login;
     private CircularProgressButton circularProgressButton;
     final static int REQUEST_CODE_START_INPUT=1;
-    private long backtime=0;
-    private boolean keyboardListenersAttached=false;
-    private ViewGroup rootLayout;
 
-    private ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener=new ViewTreeObserver.OnGlobalLayoutListener() {
-        @Override
-        public void onGlobalLayout() {
-            int heightDiff=rootLayout.getRootView().getHeight()-rootLayout.getHeight();
-            int contentViewTop=getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
-
-            if(heightDiff<=contentViewTop){
-                rootLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((ScrollView)rootLayout).fullScroll(ScrollView.FOCUS_UP);
-                    }
-                });
-            }
-            else{
-                rootLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((ScrollView)rootLayout).fullScroll(ScrollView.FOCUS_DOWN);
-                    }
-                });
-            }
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-
-        if(!keyboardListenersAttached){
-            rootLayout=(ViewGroup) findViewById(R.id.login_scroll);
-            rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
-
-            keyboardListenersAttached=true;
-        }
 
         et_id = (EditText) findViewById(R.id.et_id);
         et_password = (EditText) findViewById(R.id.et_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_join=(Button)findViewById(R.id.btn_register);
 
-        service = RetrofitClient2.getClient().create(ApiService.class);
+        service = RetrofitClient.getClient().create(ApiService.class);
 
         //비밀번호 보이기 체크박스
         show_passowrd_Login=(CheckBox)findViewById(R.id.show_passowrd_Login);
@@ -173,10 +139,10 @@ public class LogInActivity extends AppCompatActivity {
     }
     private void startLogin(){
         {
-            String id=et_id.getText().toString();
-            String pw=et_password.getText().toString();
+            String userid=et_id.getText().toString();
+            String userpassword=et_password.getText().toString();
 
-            Call<LoginResponse> call = service.userLogin(new LoginData(id, pw));
+            Call<LoginResponse> call = service.userLogin(new LoginData(userid, userpassword));
             call.enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
@@ -204,15 +170,6 @@ public class LogInActivity extends AppCompatActivity {
         builder.setNegativeButton("예",((dialog, which) -> {finish();}));
         builder.show();
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(keyboardListenersAttached){
-            rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(keyboardLayoutListener);
-        }
-    }
-
     //이메일 로그인 조건
 //    private boolean isEmailValid(String email) {
 //        return email.contains("@");

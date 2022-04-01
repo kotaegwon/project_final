@@ -3,14 +3,14 @@ package org.techtown.rc119.Login_Register;
 import com.google.gson.annotations.SerializedName;
 
 public class LoginData {
-    @SerializedName("id")
-    String id;
+    @SerializedName("userid")
+    String userid;
 
-    @SerializedName("pw")
-    String pw;
+    @SerializedName("userpassword")
+    String userpassword;
 
-    public LoginData(String id, String pw) {
-        this.id = id;
-        this.pw = pw;
+    public LoginData(String userid, String userpassword) {
+        this.userid = userid;
+        this.userpassword = userpassword;
     }
 }

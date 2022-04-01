@@ -53,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
         et_phone=(EditText)findViewById(R.id.et_phone);
         et_phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        service = RetrofitClient2.getClient().create(ApiService.class);
+        service = RetrofitClient.getClient().create(ApiService.class);
 
         //비밀번호 표시 체크박스
         showPassword=(CheckBox) findViewById(R.id.show_passowrd);
@@ -90,7 +90,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void attemptJoin() {
         et_name.setError(null);
@@ -140,12 +139,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void startJoin(){
-        String name=et_name.getText().toString();
-        String id=et_id.getText().toString();
-        String pw=et_password_register.getText().toString();
-        String phonenumber=et_phone.getText().toString();
+        String username=et_name.getText().toString();
+        String userid=et_id.getText().toString();
+        String userpassword=et_password_register.getText().toString();
+        String userphone=et_phone.getText().toString();
 
-        Call<JoinResponse> call = service.userJoin(new JoinData(name, id, pw, phonenumber));
+        Call<JoinResponse> call = service.userJoin(new JoinData(username, userid, userpassword, userphone));
         call.enqueue(new Callback<JoinResponse>() {
             @Override
             public void onResponse(Call<JoinResponse> call, Response<JoinResponse> response) {

@@ -38,9 +38,14 @@ public interface ApiService {
     Call<LoginResponse> userLogin(@Body LoginData data);
 
     //회원가입
-    @POST("/register")
+    @POST("/new")
     Call<JoinResponse> userJoin(@Body JoinData data);
 
     @GET("/{direction}")
     Call<ResponseBody> direction(@Path("direction") String direction);
+
+    @FormUrlEncoded
+    @POST("/temphum")
+    Call<ResponseBody> gettemp(@Field("data") String data);
+
 }

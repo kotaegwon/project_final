@@ -33,9 +33,6 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.techtown.rc119.ImageList.ImageListActivity;
 import org.techtown.rc119.Network.ApiService;
 import org.techtown.rc119.Network.RetrofitClient;
@@ -197,9 +194,7 @@ public class ControlActivity extends AppCompatActivity {
                         } else if (event.getAction() == MotionEvent.ACTION_UP) {
                             isBtnDown = false;
                             TouchDirection("stop");
-                            Thread.currentThread().interrupted();
                             Log.i("ko", "stop");
-                            Toast.makeText(ControlActivity.this, "정지", Toast.LENGTH_SHORT).show();
                         }
                         break;
 
@@ -219,7 +214,6 @@ public class ControlActivity extends AppCompatActivity {
                             isBtnDown = false;
                             TouchDirection("stop");
                             Log.i("ko", "stop");
-                            Toast.makeText(ControlActivity.this, "정지", Toast.LENGTH_SHORT).show();
                         }
                         break;
 
@@ -238,7 +232,6 @@ public class ControlActivity extends AppCompatActivity {
                             isBtnDown = false;
                             TouchDirection("stop");
                             Log.i("ko", "stop");
-                            Toast.makeText(ControlActivity.this, "정지", Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case R.id.btn_back:
@@ -255,7 +248,6 @@ public class ControlActivity extends AppCompatActivity {
                             isBtnDown = false;
                             TouchDirection("stop");
                             Log.i("ko", "stop");
-                            Toast.makeText(ControlActivity.this, "정지", Toast.LENGTH_SHORT).show();
                         }
                         break;
                 }
@@ -267,6 +259,37 @@ public class ControlActivity extends AppCompatActivity {
         btn_left.setOnTouchListener(touchListener);
         btn_back.setOnTouchListener(touchListener);
     }
+
+//    public void getTemp(){
+//        Call<ResponseBody> call_post = service.gettemp("온도 내놔");
+//        //enqueue로 비동기 통신 실행
+//        call_post.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            //Callback 리스너 등록
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                if (response.isSuccessful()) { //onResponse통신 성공시 Callback
+//                    try {
+//                        String result = response.body().string();
+//                        tv_temperature.setText(result);
+//                        Log.i("ko", "result = " + result);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    //에러 코드 확인
+//                    Log.i("ko", "error = " + String.valueOf(response.code()));
+//                    Toast.makeText(getApplicationContext(), "error = " + String.valueOf(response.code()), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            //통신 실패시 callback
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Log.i("ko", "Fail");
+//                Toast.makeText(getApplicationContext(), "Response Fail", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
     //툴바에 toolbar 인플레이트
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -306,7 +329,6 @@ public class ControlActivity extends AppCompatActivity {
         return dateFormat.format(date);
     }
 
-
     private void TouchDirection(String data) {
 
         Call<ResponseBody> call_post = service.direction(data);
@@ -319,7 +341,6 @@ public class ControlActivity extends AppCompatActivity {
                     try {
                         String result = response.body().string();
                         Log.i("ko", "result = " + result);
-                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
